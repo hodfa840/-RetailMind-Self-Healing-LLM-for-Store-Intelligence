@@ -11,6 +11,7 @@ import sys
 import gradio as gr
 import plotly.graph_objects as go
 from modules.data_simulation import generate_catalog, get_scenarios
+from modules.shared import get_embedding_model
 from modules.retrieval import HybridRetriever
 from modules.drift import DriftDetector
 from modules.adaptation import Adapter
@@ -229,11 +230,14 @@ def process_query(query: str, history: list):
 
     logger.info("Processing query: %r", query)
 
+    # Encode query once — shared by drift detection and retrieval
+    query_emb = get_embedding_model().encode([query], show_progress_bar=False)[0]
+
     # 1. Measure drift
-    drift_state, scores = detector.analyze_drift(query)
+    drift_state, scores = detector.analyze_drift(query, query_emb=query_emb)
 
     # 2. Retrieve products (hybrid: price-filter + semantic)
-    retrieved = retriever.search(query, top_k=4)
+    retrieved = retriever.search(query, top_k=4, query_emb=query_emb)
 
     # 3. Adapt system prompt
     system_prompt = adapter.adapt_prompt(drift_state)

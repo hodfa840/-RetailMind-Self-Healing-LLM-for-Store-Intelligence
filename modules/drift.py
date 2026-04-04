@@ -16,19 +16,10 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
+
+from modules.shared import get_embedding_model
 
 logger = logging.getLogger(__name__)
-
-# Use shared model instance across retriever & drift detector
-_shared_model: SentenceTransformer | None = None
-
-
-def _get_model() -> SentenceTransformer:
-    global _shared_model
-    if _shared_model is None:
-        _shared_model = SentenceTransformer("all-MiniLM-L6-v2")
-    return _shared_model
 
 
 @dataclass
@@ -57,7 +48,7 @@ class DriftDetector:
     _concept_embs: dict[str, Any] = field(default_factory=dict, repr=False)
 
     def __post_init__(self) -> None:
-        model = _get_model()
+        model = get_embedding_model()
         # Multiple anchor phrases per concept → averaged embedding for robustness
         concept_phrases = {
             "price_sensitive": [
@@ -95,13 +86,17 @@ class DriftDetector:
                 self._ewma[c] = 0.15
     # ── Public API ──────────────────────────────────────────────────────────
 
-    def analyze_drift(self, query: str) -> tuple[str, dict[str, float]]:
+    def analyze_drift(
+        self, query: str, query_emb=None
+    ) -> tuple[str, dict[str, float]]:
         """
         Score *query* against all concept anchors and return
         ``(dominant_concept, raw_scores)``.
+
+        Pass *query_emb* to skip re-encoding when the caller already has it.
         """
-        model = _get_model()
-        query_emb = model.encode([query], show_progress_bar=False)[0]
+        if query_emb is None:
+            query_emb = get_embedding_model().encode([query], show_progress_bar=False)[0]
 
         raw_scores: dict[str, float] = {}
         for concept, ref_emb in self._concept_embs.items():

@@ -13,7 +13,8 @@ import re
 from typing import Any
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
+
+from modules.shared import get_embedding_model
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ class HybridRetriever:
 
     def __init__(self, catalog: list[dict]) -> None:
         self.catalog = catalog
-        self.model = SentenceTransformer("all-MiniLM-L6-v2")
+        self.model = get_embedding_model()
 
         # Build rich embedding texts that capture all searchable facets
         texts = [
@@ -47,6 +48,7 @@ class HybridRetriever:
         query: str,
         top_k: int = 4,
         category_filter: str | None = None,
+        query_emb=None,
     ) -> list[dict[str, Any]]:
         """
         Retrieve top-k products for *query*.
@@ -56,6 +58,8 @@ class HybridRetriever:
         2. Pre-filter catalog by price / category if applicable.
         3. Rank remaining items by cosine similarity.
         4. Return top-k with scores.
+
+        Pass *query_emb* to skip re-encoding when the caller already has it.
         """
         price_cap = self._extract_price_cap(query)
         cat_hint = category_filter or self._extract_category_hint(query)
@@ -64,7 +68,8 @@ class HybridRetriever:
         candidate_indices = self._prefilter(price_cap, cat_hint)
 
         # Stage 2 — semantic ranking over candidates
-        query_emb = self.model.encode([query], show_progress_bar=False)[0]
+        if query_emb is None:
+            query_emb = self.model.encode([query], show_progress_bar=False)[0]
         query_norm = np.linalg.norm(query_emb)
 
         if len(candidate_indices) == 0:

@@ -30,7 +30,7 @@ def _get_pipeline():
             "text-generation",
             model="Qwen/Qwen2.5-0.5B-Instruct",
             device="cpu",
-            torch_dtype=torch.bfloat16,
+            torch_dtype=torch.float32,
         )
         logger.info("Model loaded in %.1fs", time.time() - t0)
     return _generator
@@ -81,7 +81,7 @@ def generate_response(
         gen = _get_pipeline()
         result = gen(
             messages,
-            max_new_tokens=120,
+            max_new_tokens=80,
             do_sample=False,
             return_full_text=False,
         )
