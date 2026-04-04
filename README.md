@@ -11,7 +11,7 @@
 
 **An autonomous e-commerce AI that detects semantic drift in user intent and self-heals its own behavior in real time — no human in the loop.**
 
-[Live Demo](#-quick-start) · [Architecture](#-architecture) · [How It Works](#-how-the-self-healing-loop-works) · [Technical Decisions](#-technical-decisions)
+[Live Demo](https://huggingface.co/spaces/Hodfa71/RetailMind) · [Architecture](#-architecture) · [How It Works](#-how-the-self-healing-loop-works) · [Technical Decisions](#-technical-decisions)
 
 </div>
 
