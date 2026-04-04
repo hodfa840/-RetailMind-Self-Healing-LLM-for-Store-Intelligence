@@ -432,6 +432,7 @@ with gr.Blocks(title="RetailMind — Self-Healing AI", css=css, theme=gr.themes.
             chatbot = gr.Chatbot(
                 height=420,
                 container=False,
+                type="messages",
                 placeholder="Ask me about products, deals, or seasonal picks…",
             )
             with gr.Row():
