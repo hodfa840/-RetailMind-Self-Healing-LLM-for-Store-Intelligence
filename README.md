@@ -30,7 +30,7 @@ allow_api: false
 
 ---
 
-![RetailMind demo](https://raw.githubusercontent.com/hodfa840/-RetailMind-Self-Healing-LLM-for-Store-Intelligence/main/demo.gif)
+![RetailMind demo](https://media.githubusercontent.com/media/hodfa840/-RetailMind-Self-Healing-LLM-for-Store-Intelligence/main/demo.gif)
 
 ---
 
