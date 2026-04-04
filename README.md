@@ -9,7 +9,7 @@ python_version: "3.10"
 hf_transfer: true
 app_file: app.py
 pinned: false
-allow_api: true
+allow_api: false
 ---
 <div align="center">
 
