@@ -30,9 +30,7 @@ allow_api: false
 
 ---
 
-<!-- Replace the line below with your recorded GIF -->
-<!-- To record: open the demo, use LICEcap / ScreenToGif / Kap, run through Phase 1→4, save as demo.gif, then: git add demo.gif && git commit -m "add demo gif" && git push -->
-![RetailMind demo](demo.gif)
+![RetailMind demo](https://raw.githubusercontent.com/hodfa840/-RetailMind-Self-Healing-LLM-for-Store-Intelligence/main/demo.gif)
 
 ---
 
