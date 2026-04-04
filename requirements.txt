@@ -1,4 +1,3 @@
-gradio>=5.23.0
 transformers
 torch
 sentence-transformers
