@@ -1,0 +1,40 @@
+# ── Secrets & tokens ───────────────────────────────────────────
+hf_token
+gh_token
+.env
+*.key
+
+# ── Python ─────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ── Virtual environments ──────────────────────────────────────
+venv/
+.venv/
+env/
+
+# ── IDE / Editor ──────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Gradio ────────────────────────────────────────────────────
+.gradio/
+flagged/
+
+# ── OS ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Models (don't push multi-GB weights) ─────────────────────
+*.bin
+*.safetensors
+*.gguf
+models/
