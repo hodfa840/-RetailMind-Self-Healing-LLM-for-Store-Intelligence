@@ -1,8 +1,6 @@
-gradio==5.1.0
 transformers
 torch
 sentence-transformers
-huggingface_hub==0.26.2
 python-dotenv
 plotly
 numpy
