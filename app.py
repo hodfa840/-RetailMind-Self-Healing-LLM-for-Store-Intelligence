@@ -404,7 +404,7 @@ body, .gradio-container {
 footer { display: none !important; }
 """
 
-with gr.Blocks(title="RetailMind — Self-Healing AI") as app:
+with gr.Blocks(title="RetailMind — Self-Healing AI", css=css, theme=gr.themes.Base()) as app:
 
     # ── Header ────────────────────────────────────────────────────
     gr.HTML("""
@@ -518,4 +518,4 @@ with gr.Blocks(title="RetailMind — Self-Healing AI") as app:
 
 
 if __name__ == "__main__":
-    app.launch(server_name="0.0.0.0", share=True, css=css, theme=gr.themes.Base())
+    app.launch(server_name="0.0.0.0", share=True)
