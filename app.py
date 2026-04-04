@@ -70,9 +70,13 @@ IMAGE_MAP = {
     "Overcoat": "https://images.unsplash.com/photo-1544923246-77307dd270b5?w=400&h=300&fit=crop",
     "Wallet": "https://images.unsplash.com/photo-1627123424574-724758594e93?w=400&h=300&fit=crop",
     "Belt": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop",
-    "Candle": "https://images.unsplash.com/photo-1602607616777-b8fb tried?w=400&h=300&fit=crop",
+    "Candle": "https://images.unsplash.com/photo-1602607616777-b8fbdc2cd8a9?w=400&h=300&fit=crop",
     "Blanket": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop",
     "Clock": "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=400&h=300&fit=crop",
+    "Sunscreen": "https://images.unsplash.com/photo-1556228578-83b6329731eb?w=400&h=300&fit=crop",
+    "Lipstick": "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=400&h=300&fit=crop",
+    "Serum": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=300&fit=crop",
+    "Lip Balm": "https://images.unsplash.com/photo-1629813359670-357ff8ca8e21?w=400&h=300&fit=crop",
     "Towel": "https://images.unsplash.com/photo-1583845112203-29329902332e?w=400&h=300&fit=crop",
     "Hoodie": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=300&fit=crop",
     "Chino": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400&h=300&fit=crop",
@@ -361,7 +365,7 @@ body, .gradio-container {
 footer { display: none !important; }
 """
 
-with gr.Blocks(css=css, theme=gr.themes.Base(), title="RetailMind — Self-Healing AI") as app:
+with gr.Blocks(title="RetailMind — Self-Healing AI") as app:
 
     # ── Header ────────────────────────────────────────────────────
     gr.HTML("""
@@ -381,10 +385,14 @@ with gr.Blocks(css=css, theme=gr.themes.Base(), title="RetailMind — Self-Heali
         # ── LEFT: Chat Panel ─────────────────────────────────────
         with gr.Column(scale=4, elem_classes=["glass-panel"]):
             gr.HTML("<div class='panel-header'>💬 AI Shopping Assistant</div>")
+            gr.HTML("""
+            <div style="padding: 10px 14px; margin-bottom: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px; font-size: 0.85em; color: #93c5fd; line-height: 1.4;">
+                <b>🏷️ In Stock:</b> Outerwear & Apparel <span>·</span> Footwear <span>·</span> Tech Accessories <span>·</span> Home & Lifestyle <span>·</span> Health & Beauty
+            </div>
+            """)
             chatbot = gr.Chatbot(
                 height=420,
                 container=False,
-                show_copy_button=True,
                 placeholder="Ask me about products, deals, or seasonal picks…",
             )
             with gr.Row():
@@ -465,4 +473,4 @@ with gr.Blocks(css=css, theme=gr.themes.Base(), title="RetailMind — Self-Heali
 
 
 if __name__ == "__main__":
-    app.launch(server_name="0.0.0.0", share=True)
+    app.launch(server_name="0.0.0.0", share=True, css=css, theme=gr.themes.Base())

@@ -236,6 +236,20 @@ _TEMPLATES: list[dict] = [
     {"title": "Retro Aviator Sunglasses", "category": "casual", "price": 29.99,
      "desc": "Classic aviator frames in brushed gold metal with gradient smoke lenses. UV400 protection, adjustable nose pads, and spring-loaded temples for a comfortable fit.",
      "tags": ["aviator", "UV400", "retro", "metal-frame"], "materials": "Brushed metal alloy, gradient polycarbonate lenses"},
+
+    # ── Health & Beauty ─────────────────────────────────────────────────────
+    {"title": "SPF 50 Mineral Sunscreen", "category": "health", "price": 24.99,
+     "desc": "Broad-spectrum mineral sunscreen that protects against UV rays without harmful chemicals. Reef-safe, non-greasy formula that absorbs quickly. Leaves no white cast.",
+     "tags": ["sunscreen", "skincare", "SPF", "reef-safe"], "materials": "Zinc oxide, aloe vera"},
+    {"title": "Hydrating Matte Lipstick", "category": "health", "price": 18.99,
+     "desc": "Long-lasting matte lipstick infused with hyaluronic acid and shea butter for all-day comfort. Highly pigmented shade that doesn't feather or dry out your lips.",
+     "tags": ["lipstick", "makeup", "beauty", "hydrating"], "materials": "Hyaluronic acid, shea butter, vegan pigments"},
+    {"title": "Vitamin C Glow Serum", "category": "health", "price": 34.99,
+     "desc": "Brightening facial serum with 15% Vitamin C and hyaluronic acid. Reduces dark spots, evens skin tone, and boosts collagen production. Safe for sensitive skin.",
+     "tags": ["serum", "skincare", "vitamin-c", "anti-aging"], "materials": "Ascorbic acid, hyaluronic acid, vitamin E"},
+    {"title": "Organic Lip Balm Trio", "category": "health", "price": 12.99,
+     "desc": "Sustainably sourced beeswax lip balm set. Includes peppermint, vanilla, and unscented. Deeply moisturizes chapped lips during harsh weather.",
+     "tags": ["lip-balm", "skincare", "organic", "moisturizing"], "materials": "Organic beeswax, coconut oil, essential oils"},
 ]
 
 
@@ -282,7 +296,7 @@ def _expand_catalog(templates: list[dict], target_count: int = 200) -> list[Prod
 
 def generate_catalog() -> list[Product]:
     """Generate the full product catalog."""
-    return _expand_catalog(_TEMPLATES, target_count=200)
+    return _expand_catalog(_TEMPLATES, target_count=len(_TEMPLATES))
 
 
 def get_scenarios() -> dict[str, list[str]]:

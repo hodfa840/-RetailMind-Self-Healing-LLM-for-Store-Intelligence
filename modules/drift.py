@@ -83,6 +83,16 @@ class DriftDetector:
 
         logger.info("DriftDetector initialized with %d concept anchors.", len(concept_phrases))
 
+        # Prepopulate history so chart renders correctly on first load
+        for _ in range(5):
+            self.history.append(DriftEvent(
+                timestamp=time.time(),
+                query="[system initialization]",
+                scores={c: 0.15 for c in self._concept_embs},
+                dominant="normal"
+            ))
+            for c in self._concept_embs:
+                self._ewma[c] = 0.15
     # ── Public API ──────────────────────────────────────────────────────────
 
     def analyze_drift(self, query: str) -> tuple[str, dict[str, float]]:

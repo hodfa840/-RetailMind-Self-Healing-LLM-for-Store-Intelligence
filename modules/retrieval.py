@@ -79,6 +79,8 @@ class HybridRetriever:
 
         results = []
         for li in top_local:
+            if float(scores[li]) < 0.20:
+                continue
             global_idx = candidate_indices[li]
             results.append({
                 "product": self.catalog[global_idx],
@@ -128,11 +130,11 @@ class HybridRetriever:
             "electronics": ["tech", "electronic", "gadget", "headphone", "speaker", "charger", "smart"],
             "premium": ["luxury", "premium", "high-end", "designer", "artisan"],
             "home": ["home", "kitchen", "desk", "candle", "bath", "decor"],
-            "casual": ["casual", "streetwear", "everyday", "hoodie", "sneaker", "jeans"],
+            "health": ["health", "beauty", "sunscreen", "lipstick", "serum", "balm", "skincare", "makeup"],
         }
-        q_lower = query.lower()
         for cat, keywords in category_keywords.items():
-            if any(kw in q_lower for kw in keywords):
+            pattern = r'\b(?:' + '|'.join(keywords) + r')\b'
+            if re.search(pattern, query, re.IGNORECASE):
                 return cat
         return None
 
