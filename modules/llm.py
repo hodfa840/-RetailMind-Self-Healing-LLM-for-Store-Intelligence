@@ -30,7 +30,7 @@ def _get_pipeline():
             "text-generation",
             model="Qwen/Qwen2.5-0.5B-Instruct",
             device="cpu",
-            torch_dtype=torch.float32,
+            torch_dtype=torch.bfloat16,
         )
         logger.info("Model loaded in %.1fs", time.time() - t0)
     return _generator
@@ -69,8 +69,9 @@ def generate_response(
                 f"══════ Available Inventory ══════\n\n"
                 f"{context}\n\n"
                 f"══════════════════════════════════\n"
-                f"IMPORTANT: Only recommend from the products listed above. "
-                f"Cite exact names and prices."
+                f"IMPORTANT: You are an elite AI shopping assistant. "
+                f"Only recommend from the products listed above. "
+                f"Cite exact names and prices. Do not hallucinate items that are not in the provided inventory."
             ),
         },
         {"role": "user", "content": user_query},
@@ -80,10 +81,10 @@ def generate_response(
         gen = _get_pipeline()
         result = gen(
             messages,
-            max_new_tokens=250,
-            temperature=0.3,
+            max_new_tokens=150,
+            temperature=0.1,
             do_sample=True,
-            top_p=0.9,
+            top_p=0.85,
             return_full_text=False,
         )
         generated = result[0]["generated_text"]

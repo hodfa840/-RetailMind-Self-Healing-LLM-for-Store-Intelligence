@@ -246,6 +246,24 @@ def process_query(query: str, history: list):
     return "", history, _plot_drift(), explanation, label, _build_product_html(retrieved)
 
 
+def reset_chat():
+    global detector, adapter
+    detector = DriftDetector()
+    adapter = Adapter()
+    return (
+        "",
+        [],
+        _plot_drift(),
+        ("📊 System Status: Normal\n"
+         "━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+         "No significant drift detected.\n"
+         "System prompt: Default balanced mode.\n"
+         "All EWMA concept scores below threshold (0.38)."),
+        "⚖️ Balanced Mode",
+        _empty_catalog_html()
+    )
+
+
 def load_example(example_text: str) -> str:
     return example_text
 
@@ -403,6 +421,7 @@ with gr.Blocks(title="RetailMind — Self-Healing AI") as app:
                     scale=8,
                 )
                 submit = gr.Button("Search", variant="primary", scale=2)
+                reset_btn = gr.Button("🔄 Reset", variant="secondary", scale=1)
 
             gr.HTML("""
             <div class='info-callout'>
@@ -468,6 +487,11 @@ with gr.Blocks(title="RetailMind — Self-Healing AI") as app:
     msg.submit(
         process_query,
         inputs=[msg, chatbot],
+        outputs=[msg, chatbot, drift_plot, explanation_box, current_phase, retrieved_box],
+    )
+    reset_btn.click(
+        reset_chat,
+        inputs=None,
         outputs=[msg, chatbot, drift_plot, explanation_box, current_phase, retrieved_box],
     )
 
