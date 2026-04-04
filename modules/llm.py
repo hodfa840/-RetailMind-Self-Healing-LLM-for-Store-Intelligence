@@ -1,39 +1,57 @@
 """
-Local LLM inference engine for RetailMind.
+LLM inference engine for RetailMind.
 
-Uses Qwen2.5-0.5B-Instruct running entirely on CPU — no API keys, no GPU,
-no external dependencies.  Prompt engineering is tuned to minimize
-hallucination by grounding all answers in the provided product context.
+Uses the HuggingFace Inference API (serverless, GPU-backed) so responses
+arrive in ~1–2 s instead of 15–20 s on CPU.  Falls back to a structured
+template if the API is unavailable.
 """
 
 from __future__ import annotations
 
 import logging
-import time
+import os
 from typing import Any
 
-import torch
-from transformers import pipeline
+from huggingface_hub import InferenceClient
 
 logger = logging.getLogger(__name__)
 
-_generator = None
+_client: InferenceClient | None = None
+MODEL = "Qwen/Qwen2.5-72B-Instruct"   # strong model, free on HF serverless
 
 
-def _get_pipeline():
-    """Lazy-load the text-generation pipeline (singleton)."""
-    global _generator
-    if _generator is None:
-        logger.info("Loading Qwen2.5-0.5B-Instruct on CPU (first call only)…")
-        t0 = time.time()
-        _generator = pipeline(
-            "text-generation",
-            model="Qwen/Qwen2.5-0.5B-Instruct",
-            device="cpu",
-            torch_dtype=torch.float32,
+def _get_client() -> InferenceClient:
+    global _client
+    if _client is None:
+        token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
+        _client = InferenceClient(token=token)
+        logger.info("InferenceClient ready (model=%s)", MODEL)
+    return _client
+
+
+def _build_context(retrieved_items: list[dict[str, Any]]) -> str:
+    lines = []
+    for i, r in enumerate(retrieved_items, 1):
+        p = r["product"]
+        stars = "★" * int(p.get("rating", 4)) + "☆" * (5 - int(p.get("rating", 4)))
+        lines.append(
+            f"{i}. {p['title']} — ${p['price']:.2f}\n"
+            f"   Category: {p['category']} | Rating: {stars} ({p.get('reviews', 0)} reviews)\n"
+            f"   Materials: {p.get('materials', 'N/A')}\n"
+            f"   Description: {p['desc']}"
         )
-        logger.info("Model loaded in %.1fs", time.time() - t0)
-    return _generator
+    return "\n\n".join(lines)
+
+
+def _fallback_response(retrieved_items: list[dict[str, Any]]) -> str:
+    """Structured template used when the API is unavailable."""
+    if not retrieved_items:
+        return "I couldn't find matching products for your query. Try different keywords."
+    lines = ["Here are my top picks for you:\n"]
+    for r in retrieved_items:
+        p = r["product"]
+        lines.append(f"• **{p['title']}** — ${p['price']:.2f}\n  {p['desc'][:120]}…")
+    return "\n".join(lines)
 
 
 def generate_response(
@@ -41,26 +59,7 @@ def generate_response(
     user_query: str,
     retrieved_items: list[dict[str, Any]],
 ) -> str:
-    """
-    Generate a grounded product recommendation.
-
-    The retrieved items are injected directly into the system prompt so
-    the model can only reference real products.
-    """
-    # Build structured context from retrieved products
-    context_lines = []
-    for i, r in enumerate(retrieved_items, 1):
-        p = r["product"]
-        stars = "★" * int(p.get("rating", 4)) + "☆" * (5 - int(p.get("rating", 4)))
-        context_lines.append(
-            f"{i}. {p['title']} — ${p['price']:.2f}\n"
-            f"   Category: {p['category']} | Rating: {stars} ({p.get('reviews', 0)} reviews)\n"
-            f"   Materials: {p.get('materials', 'N/A')}\n"
-            f"   Description: {p['desc']}"
-        )
-
-    context = "\n\n".join(context_lines)
-
+    context = _build_context(retrieved_items)
     messages = [
         {
             "role": "system",
@@ -68,27 +67,24 @@ def generate_response(
                 f"{system_prompt}\n\n"
                 f"══════ Available Inventory ══════\n\n"
                 f"{context}\n\n"
-                f"══════════════════════════════════\n"
-                f"IMPORTANT: You are an elite AI shopping assistant. "
-                f"Only recommend from the products listed above. "
-                f"Cite exact names and prices. Do not hallucinate items that are not in the provided inventory."
+                f"════════════════════════════════\n"
+                f"You are a helpful AI shopping assistant. "
+                f"Only recommend products listed above. "
+                f"Cite exact names and prices. Be concise (2–4 sentences)."
             ),
         },
         {"role": "user", "content": user_query},
     ]
 
     try:
-        gen = _get_pipeline()
-        result = gen(
-            messages,
-            max_new_tokens=80,
-            do_sample=False,
-            return_full_text=False,
+        client = _get_client()
+        result = client.chat.completions.create(
+            model=MODEL,
+            messages=messages,
+            max_tokens=150,
+            temperature=0.3,
         )
-        generated = result[0]["generated_text"]
-        if isinstance(generated, list):
-            return generated[-1]["content"]
-        return generated
+        return result.choices[0].message.content.strip()
     except Exception as e:
-        logger.exception("LLM inference failed")
-        return f"[RetailMind] I encountered an issue generating a response. Error: {e}"
+        logger.warning("Inference API failed (%s), using fallback template.", e)
+        return _fallback_response(retrieved_items)

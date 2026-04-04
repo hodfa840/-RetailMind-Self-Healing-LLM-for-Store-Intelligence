@@ -1,6 +1,5 @@
-transformers
-torch
 sentence-transformers
+huggingface_hub
 python-dotenv
 hf_transfer
 plotly
