@@ -519,4 +519,4 @@ with gr.Blocks(title="RetailMind — Self-Healing AI", css=css, theme=gr.themes.
 
 
 if __name__ == "__main__":
-    app.launch(server_name="0.0.0.0", share=False, ssr=False)
+    app.launch(server_name="0.0.0.0")
