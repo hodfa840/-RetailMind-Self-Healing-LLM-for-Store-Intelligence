@@ -57,7 +57,9 @@ IMAGE_MAP = {
     "Shoes": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop",
     "Jacket": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=300&fit=crop",
     "Watch": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop",
-    "Mat": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=300&fit=crop",
+    "Mat": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop", # reusing backpack as mat placeholder
+    "Tights": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=300&fit=crop", # reusing hoodie as apparel placeholder
+    "Pack": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop",
     "Headphones": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop",
     "Tracker": "https://images.unsplash.com/photo-1557438159-51eec7a6c9e8?w=400&h=300&fit=crop",
     "Earbuds": "https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=400&h=300&fit=crop",
@@ -90,7 +92,7 @@ IMAGE_MAP = {
     "Pour-Over": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=300&fit=crop",
 }
 
-DEFAULT_IMG = "https://images.unsplash.com/photo-1472851294608-062f124dcb02?w=400&h=300&fit=crop"
+DEFAULT_IMG = "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop" # use shoes as fallback so it never 404s
 
 
 def _get_product_image(title: str) -> str:
