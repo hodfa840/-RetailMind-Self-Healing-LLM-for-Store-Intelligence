@@ -81,10 +81,8 @@ def generate_response(
         gen = _get_pipeline()
         result = gen(
             messages,
-            max_new_tokens=150,
-            temperature=0.1,
-            do_sample=True,
-            top_p=0.85,
+            max_new_tokens=120,
+            do_sample=False,
             return_full_text=False,
         )
         generated = result[0]["generated_text"]

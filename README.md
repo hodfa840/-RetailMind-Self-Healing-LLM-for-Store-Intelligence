@@ -18,11 +18,12 @@ pinned: false
 [![CI](https://github.com/hodfa840/-RetailMind-Self-Healing-LLM-for-Store-Intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/hodfa840/-RetailMind-Self-Healing-LLM-for-Store-Intelligence/actions)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue?logo=python&logoColor=white)](https://python.org)
 [![Gradio](https://img.shields.io/badge/Gradio-4.0%2B-orange?logo=gradio)](https://gradio.app)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Space-blue)](https://huggingface.co/spaces/Hodfa71/RetailMind)
+[![Live Demo](https://img.shields.io/badge/Demo-Direct%20Link-green)](https://hodfa71-retailmind.hf.space/)
 
 **An autonomous e-commerce AI that detects semantic drift in user intent and self-heals its own behavior in real time — no human in the loop.**
 
-[Live Demo](https://huggingface.co/spaces/Hodfa71/RetailMind) · [Architecture](#-architecture) · [How It Works](#-how-the-self-healing-loop-works) · [Technical Decisions](#-technical-decisions)
+[Hugging Face Space](https://huggingface.co/spaces/Hodfa71/RetailMind) · [Direct App URL](https://hodfa71-retailmind.hf.space/) · [Architecture](#-architecture) · [How It Works](#-how-the-self-healing-loop-works)
 
 </div>
 
