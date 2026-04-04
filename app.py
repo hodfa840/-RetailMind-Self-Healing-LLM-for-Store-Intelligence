@@ -440,7 +440,7 @@ with gr.Blocks(title="RetailMind — Self-Healing AI", css=css, theme=gr.themes.
                 with gr.Accordion(scenario_name, open=False):
                     for q in queries:
                         btn = gr.Button(q, size="sm", variant="secondary")
-                        btn.click(fn=load_example, inputs=btn, outputs=msg)
+                        btn.click(fn=load_example, inputs=btn, outputs=msg, api_name=False)
 
         # ── MIDDLE: Product Feed ─────────────────────────────────
         with gr.Column(scale=4, elem_classes=["glass-panel"]):
@@ -488,16 +488,19 @@ with gr.Blocks(title="RetailMind — Self-Healing AI", css=css, theme=gr.themes.
         process_query,
         inputs=[msg, chatbot],
         outputs=[msg, chatbot, drift_plot, explanation_box, current_phase, retrieved_box],
+        api_name=False,
     )
     msg.submit(
         process_query,
         inputs=[msg, chatbot],
         outputs=[msg, chatbot, drift_plot, explanation_box, current_phase, retrieved_box],
+        api_name=False,
     )
     reset_btn.click(
         reset_chat,
         inputs=None,
         outputs=[msg, chatbot, drift_plot, explanation_box, current_phase, retrieved_box],
+        api_name=False,
     )
 
 
