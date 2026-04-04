@@ -4,8 +4,9 @@ emoji: 🛍️
 colorFrom: blue
 colorTo: indigo
 sdk: gradio
-sdk_version: 5.6.0
+sdk_version: 5.13.0
 python_version: "3.10"
+hf_transfer: true
 app_file: app.py
 pinned: false
 ---

@@ -2,5 +2,6 @@ transformers
 torch
 sentence-transformers
 python-dotenv
+hf_transfer
 plotly
 numpy

@@ -6,6 +6,25 @@ autonomous prompt adaptation, and hybrid RAG retrieval.
 """
 
 import logging
+import sys
+
+# ── HF Hub Compatibility Monkeypatch ───────────────────────────────────────
+# Fix for: ImportError: cannot import name 'HfFolder' from 'huggingface_hub'
+# This happens in HF Spaces with newer hub versions and older Gradio versions.
+try:
+    import huggingface_hub
+    if not hasattr(huggingface_hub, "HfFolder"):
+        class MockHfFolder:
+            @staticmethod
+            def get_token(): return None
+            @staticmethod
+            def save_token(token): pass
+            @staticmethod
+            def delete_token(): pass
+        huggingface_hub.HfFolder = MockHfFolder
+except ImportError:
+    pass
+
 import gradio as gr
 import plotly.graph_objects as go
 from modules.data_simulation import generate_catalog, get_scenarios
