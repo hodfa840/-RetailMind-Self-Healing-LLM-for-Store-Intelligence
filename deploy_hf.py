@@ -1,4 +1,3 @@
-import os
 from huggingface_hub import HfApi
 
 token = open("hf_token").read().strip()

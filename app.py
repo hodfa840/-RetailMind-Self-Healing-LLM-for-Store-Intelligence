@@ -6,7 +6,6 @@ autonomous prompt adaptation, and hybrid RAG retrieval.
 """
 
 import logging
-import sys
 
 import gradio as gr
 import plotly.graph_objects as go
@@ -110,7 +109,6 @@ def _get_product_image(title: str) -> str:
 
 def _plot_drift() -> go.Figure:
     series = detector.get_history_series()
-    ewma = detector.get_ewma_scores()
     fig = go.Figure()
 
     colors = {"price_sensitive": "#f59e0b", "summer_shift": "#06b6d4", "eco_trend": "#10b981"}
@@ -124,7 +122,7 @@ def _plot_drift() -> go.Figure:
             name=labels.get(concept, concept),
             line=dict(color=colors.get(concept, "#fff"), width=2.5, shape="spline"),
             fill="tozeroy",
-            fillcolor=colors.get(concept, "#fff").replace(")", ", 0.08)").replace("rgb", "rgba") if "rgb" in colors.get(concept, "") else f"rgba(255,255,255,0.05)",
+            fillcolor=colors.get(concept, "#fff").replace(")", ", 0.08)").replace("rgb", "rgba") if "rgb" in colors.get(concept, "") else "rgba(255,255,255,0.05)",
         ))
 
     # Threshold line

@@ -4,7 +4,6 @@ Unit tests for RetailMind core modules.
 Run with: pytest tests/ -v
 """
 
-import pytest
 from modules.data_simulation import generate_catalog, get_scenarios
 
 
