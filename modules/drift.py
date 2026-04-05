@@ -73,17 +73,6 @@ class DriftDetector:
             self._ewma[concept] = 0.0
 
         logger.info("DriftDetector initialized with %d concept anchors.", len(concept_phrases))
-
-        # Prepopulate history so chart renders correctly on first load
-        for _ in range(5):
-            self.history.append(DriftEvent(
-                timestamp=time.time(),
-                query="[system initialization]",
-                scores={c: 0.15 for c in self._concept_embs},
-                dominant="normal"
-            ))
-            for c in self._concept_embs:
-                self._ewma[c] = 0.15
     # ── Public API ──────────────────────────────────────────────────────────
 
     def analyze_drift(
@@ -147,10 +136,20 @@ class DriftDetector:
         }
 
     def get_history_series(self) -> dict[str, list[float]]:
-        """Return full EWMA time-series for each concept (for charts)."""
-        # Recompute from history for accurate display
+        """Return full EWMA time-series for each concept (for charts).
+
+        Pads with baseline values when fewer than 5 real events exist so the
+        chart renders a smooth baseline line on first load.
+        """
         series: dict[str, list[float]] = {c: [] for c in self._concept_embs}
         ewma_state = {c: 0.0 for c in self._concept_embs}
+
+        # Pad with neutral baseline so chart always has something to show
+        padding = max(0, 5 - len(self.history))
+        for _ in range(padding):
+            for c in self._concept_embs:
+                series[c].append(0.15)
+
         for event in self.history:
             for c in self._concept_embs:
                 ewma_state[c] = self.ewma_alpha * event.scores[c] + (1 - self.ewma_alpha) * ewma_state[c]

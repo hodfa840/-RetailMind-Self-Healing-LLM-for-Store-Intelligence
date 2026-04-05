@@ -84,8 +84,6 @@ class HybridRetriever:
 
         results = []
         for li in top_local:
-            if float(scores[li]) < 0.20:
-                continue
             global_idx = candidate_indices[li]
             results.append({
                 "product": self.catalog[global_idx],
